@@ -21,4 +21,3 @@ iface = gr.Interface(
     outputs=["text","image"] )
 
 iface.launch()
-

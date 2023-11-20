@@ -5,6 +5,9 @@ import jieba
 import joblib
 import numpy as np
 from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+from sklearn.ensemble import RandomForestClassifier
+
 
 
 class GenerQuestionClassification():
@@ -103,9 +106,13 @@ class Trainer(GenerVocab):
 
     def train(self):
         X, Y = self.load_data()
+        # clf = RandomForestClassifier(n_estimators=100).fit(X,Y)
         clf = GaussianNB().fit(X, Y)
         joblib.dump(clf, 'D:/vscode_python\数字治理实验室\chat-bot\model\clf.model')
-
+        # 在模型训练之后添加以下代码
+        y_pred = clf.predict(X)  # 使用训练好的模型预测训练数据
+        accuracy = accuracy_score(Y, y_pred)  # 计算预测准确率
+        print("Accuracy: {:.2f}%".format(accuracy * 100))
 
 if __name__ == "__main__":
     gqc = GenerQuestionClassification()

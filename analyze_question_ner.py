@@ -3,6 +3,9 @@ import joblib
 import numpy as np
 import jieba.posseg as pseg
 import jieba
+import sys
+sys.path.append('数字治理实验室\谣言知识图谱论文模型\模型\CRF')
+from CRF_NER import predict
 
 
 class AnalysisQuestion():
@@ -33,23 +36,23 @@ class AnalysisQuestion():
         jieba.load_userdict("数字治理实验室\chat-bot\word/title.txt")
         jieba.load_userdict("数字治理实验室\chat-bot\word\pest.txt") # 加载属性
         self.abstractMap = {}
+        # labels = predict(question)
+        # sentences = '我们不可忽视散播谣言的危害'
+        labels = predict(question)
+        labels.append("O")
+        for i in range(0,len(labels)):
+            if labels[i] == "B-UnlawfulAct":
+                b = i
+            elif labels[i] == "I-UnlawfulAct" and labels[i+1] != "I-UnlawfulAct":
+                self.abstractMap['title'] = question[b:i+1]
+                question = question[:b] + "title" + question[i+1:]
+                i = i + (i-b+1) - 5
         list_word = pseg.lcut(question)  # 中文分词
         abstractQuery = ''
         for item in list_word:
-            word = item.word
-            pos = str(item)
-            print('123,',pos)
-            if 'pest' in pos:  # 病害
-                abstractQuery += "pest "
-                self.abstractMap['pest'] = word
-            elif 'title' in pos:
-                abstractQuery += 'title '
-                self.abstractMap['title'] = word
-            elif 'crop' in pos:
-                abstractQuery += "crop "
-                self.abstractMap['crop'] = word
-            else:
-                abstractQuery += word + " "
+            word = item.word  
+            abstractQuery += word + " "
+        print(abstractQuery,self.abstractMap)
         return abstractQuery
 
     def query_classify(self, sentence):
@@ -91,6 +94,7 @@ class AnalysisQuestion():
 
 if __name__ == "__main__":
     aq = AnalysisQuestion()
-    question = input('请输入你想查询的信息：')  
+    question = input('请输入你想查询的信息：')
+    # labels = predict(question)  
     index, params = aq.analysis_question(question)
     print(index, params)
