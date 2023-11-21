@@ -86,11 +86,11 @@ class AnalysisQuestion():
         index, strpatt = self.query_classify(abstr)
         print('句子对应的索引{}\t模板：{}'.format(index, strpatt))
         finalpatt = self.query_extention(strpatt)
-        return index, finalpatt
+        return index, finalpatt,abstr
 
 
 if __name__ == "__main__":
     aq = AnalysisQuestion()
     question = input('请输入你想查询的信息：')  
-    index, params = aq.analysis_question(question)
+    index, params,abstr = aq.analysis_question(question)
     print(index, params)
