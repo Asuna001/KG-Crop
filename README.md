@@ -32,7 +32,7 @@ pip install openai
 [word_dict.py](word_dict.py)  
 通过panda遍历三元组csv文件并把头实体的值和头实体标签存入[词典](word)文件中
 ### 数据入库
-[csv.py](csv.py)  
+[csv.py](data_processing\csv.py)  
 通过panda读取三元组文件并通过request模块下载图片链接并转化为本地链接,与原链接一同存入MySQL数据库中;通过neo4j将三元组文件录入neo4j中
 ### 模型训练
 [train.py](train.py)  
