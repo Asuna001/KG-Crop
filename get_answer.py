@@ -101,7 +101,7 @@ class Get_answer:
                 query = "SELECT localpath FROM imgpath WHERE cloudpath = %s"  
                 image.execute(query, (cloudpath_value,))  
                 result1 = image.fetchone()
-                result_list[0] = "img"
+                result_list[0] = '图片的本地链接是'
                 result_list.append(result1[0])
             return result_list
         
