@@ -1,5 +1,10 @@
-pest的危害作物有
-pest发生在什么作物身上
-pest发生在哪些作物身上
-pest危害了哪些作物
-pest对什么作物有影响
+disease的危害作物有
+disease发生在什么作物身上
+disease发生在哪些作物身上
+disease危害了哪些作物
+disease对什么作物有影响
+insect的危害作物有
+insect发生在什么作物身上
+insect发生在哪些作物身上
+insect危害了哪些作物
+insect对什么作物有影响

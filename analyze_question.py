@@ -31,7 +31,8 @@ class AnalysisQuestion():
         """
         jieba.load_userdict("数字治理实验室\chat-bot\word\crop.txt")
         jieba.load_userdict("数字治理实验室\chat-bot\word/title.txt")
-        jieba.load_userdict("数字治理实验室\chat-bot\word\pest.txt") # 加载属性
+        jieba.load_userdict("数字治理实验室\chat-bot\word\insect.txt")
+        jieba.load_userdict("数字治理实验室\chat-bot\word\disease.txt") # 加载属性
         self.abstractMap = {}
         list_word = pseg.lcut(question)  # 中文分词
         abstractQuery = ''
@@ -39,15 +40,18 @@ class AnalysisQuestion():
             word = item.word
             pos = str(item)
             print('123,',pos)
-            if 'pest' in pos:  # 病害
-                abstractQuery += "pest "
-                self.abstractMap['pest'] = word
+            if 'disease' in pos:  # 病害
+                abstractQuery += "disease "
+                self.abstractMap['disease'] = word
             elif 'title' in pos:
                 abstractQuery += 'title '
                 self.abstractMap['title'] = word
             elif 'crop' in pos:
                 abstractQuery += "crop "
                 self.abstractMap['crop'] = word
+            elif 'insect' in pos:  # 病害
+                abstractQuery += "insect "
+                self.abstractMap['insect'] = word
             else:
                 abstractQuery += word + " "
         return abstractQuery
@@ -75,8 +79,8 @@ class AnalysisQuestion():
         """
         params = []
         for abs_key in self.abstractMap:
-            if abs_key in temp:
-                params.append(self.abstractMap[abs_key])
+            # if abs_key in temp:
+            params.append(self.abstractMap[abs_key])
         return params
 
     def analysis_question(self, question):

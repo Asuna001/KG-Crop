@@ -34,7 +34,7 @@ class AnalysisQuestion():
         """
         # jieba.load_userdict("数字治理实验室\chat-bot\word\crop.txt")
         # jieba.load_userdict("数字治理实验室\chat-bot\word/title.txt")
-        # jieba.load_userdict("数字治理实验室\chat-bot\word\pest.txt") # 加载属性
+        # jieba.load_userdict("数字治理实验室\chat-bot\word\disease.txt") # 加载属性
         self.abstractMap = {}
         # labels = predict(question)
         # sentences = '我们不可忽视散播谣言的危害'
