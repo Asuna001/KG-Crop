@@ -5,6 +5,7 @@ import jieba.posseg as pseg
 import jieba
 
 
+
 class AnalysisQuestion():
     def __init__(self):
         self.vocab_path = '数字治理实验室\chat-bot\model/vocabulary.json'

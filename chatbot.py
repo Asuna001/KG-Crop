@@ -1,4 +1,4 @@
-from analyze_question import AnalysisQuestion
+from analyze_question_ner import AnalysisQuestion
 from get_answer import Get_answer
 import gradio as gr
 
