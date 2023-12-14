@@ -1,12 +1,11 @@
-from analyze_question_ner import AnalysisQuestion
-from get_answer import Get_answer
-import gradio as gr
+from analyze_question_stronger import AnalysisQuestion
+from get_answer_stronger import Get_answer
 
 def run(question):
     aq = AnalysisQuestion()
     ga = Get_answer()
     index, params , temp = aq.analysis_question(question)
-    answers = ga.get_data(index, params)
+    answers = ga.get_ans(index, params)
     return answers
 
 if __name__ == "__main__":

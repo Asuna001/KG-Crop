@@ -1,6 +1,6 @@
 import gradio as gr
-from analyze_question import AnalysisQuestion
-from get_answer import Get_answer
+from analyze_question_stronger import AnalysisQuestion
+from get_answer_stronger import Get_answer
 import openai
 
 user_question = ""
@@ -37,7 +37,7 @@ async def get_answer(question):
     index, params,abstr = aq.analysis_question(question)
     print(abstr.replace(" ", ""))
     user_question = abstr.replace(" ", "")
-    answers = ga.get_data(index, params)
+    answers = ga.get_ans(index, params)
     question = ga.get_Question(index, params)
     messages = '问题是：' + question + '\n答案是：' + str(answers)
     print(messages)
@@ -68,10 +68,24 @@ async def get_answer(question):
             #     print(answer)
             yield final_ans , gr.Image(label="图片如下",visible=False)
 
+def get_answer_list(question):
+    global user_question,index,b
+    aq = AnalysisQuestion()
+    ga = Get_answer()
+    index, params,abstr = aq.analysis_question(question)
+    print(abstr.replace(" ", ""))
+    user_question = abstr.replace(" ", "")
+    answers = ga.get_ans(index, params)
+    question = ga.get_Question(index, params)
+    b = (len(index)==1)
+    if index == 9:
+        return "见下图",gr.Image(value=answers[1],visible=True)
+    else:
+        return answers , gr.Image(label="图片如下",visible=False)
+
 def hide():
     global b 
-    b = True
-    return gr.Radio(choices=["满意","不满意"],visible=b),gr.Button(value="确认提交",visible=b)
+    return gr.Radio(label="你对回答的准确度是否满意",choices=["满意","不满意"],visible=b),gr.Button(value="确认提交",visible=b)
 
 def feedback(e):
     print(e)
@@ -84,14 +98,14 @@ def load_evaluate(e):
         global index,data_path
         print(user_question,index)
         try:
-            with open(data_path[index], 'r', encoding='utf-8') as file:
+            with open(data_path[index[0]], 'r', encoding='utf-8') as file:
                 lines = file.readlines()
                 lines = [line.strip() for line in lines]
                 print(lines)
                 if user_question in lines:
                     print("问题已经存在")
                 else:
-                    with open(data_path[index], 'a', encoding='utf-8') as file:
+                    with open(data_path[index[0]], 'a', encoding='utf-8') as file:
                         file.write("\n" + user_question)
                     print("问题存储成功")
         except FileNotFoundError:
@@ -99,19 +113,23 @@ def load_evaluate(e):
         
     else:
         print("用户不满意")
-    return gr.Radio(choices=["满意","不满意"],visible=b,value="不满意"), gr.Button(value="确认提交",visible=b)
+    return gr.Radio(label="你对回答的准确度是否满意",choices=["满意","不满意"],visible=b,value="不满意"), gr.Button(value="确认提交",visible=b)
 
 with gr.Blocks() as demo:
     with gr.Row():
         with gr.Column():
             user_input = gr.Text(label="请输入您的问题")
             match_answer = gr.Button(value="获取答案")
+            match_answer_list = gr.Button(value="获取答案数据")
         with gr.Column():
             result = gr.Text(label="匹配到的答案如下：")
             result_img = gr.Image(label="图片如下",visible=False)
-            user_evaluate = gr.Radio(choices=["满意","不满意"],visible=b,value="不满意")
+            user_evaluate = gr.Radio(label="你对回答的准确度是否满意",choices=["满意","不满意"],visible=b,value="不满意")
             upload_evaluate = gr.Button(value="确认提交",visible=b)
-    match_answer.click(fn=get_answer,inputs=[user_input],outputs=[result,result_img]).then(fn=hide,outputs=[user_evaluate,upload_evaluate])
+    match_answer.click(fn=get_answer,inputs=[user_input],outputs=[result,result_img]) \
+    .then(fn=hide,outputs=[user_evaluate,upload_evaluate])
+    match_answer_list.click(fn=get_answer_list,inputs=[user_input],outputs=[result,result_img]) \
+    .then(fn=hide,outputs=[user_evaluate,upload_evaluate])
     # user_evaluate.change(fn=feedback,inputs=[user_evaluate])
     upload_evaluate.click(fn=load_evaluate,inputs=[user_evaluate],outputs=[user_evaluate,upload_evaluate])
 

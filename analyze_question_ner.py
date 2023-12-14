@@ -40,6 +40,7 @@ class AnalysisQuestion():
         # sentences = '我们不可忽视散播谣言的危害'
         schema = []
         ie = predict(question)
+        print(ie)
         maximum = 0
         for label in ie[0]:
             schema.append(label)
@@ -94,8 +95,7 @@ class AnalysisQuestion():
         """
         params = []
         for abs_key in self.abstractMap:
-            if abs_key in temp:
-                params.append(self.abstractMap[abs_key])
+            params.append(self.abstractMap[abs_key])
         return params
 
     def analysis_question(self, question):
